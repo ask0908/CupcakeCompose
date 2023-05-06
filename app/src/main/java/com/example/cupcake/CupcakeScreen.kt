@@ -20,6 +20,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.cupcake.data.DataSource.flavors
 import com.example.cupcake.data.DataSource.quantityOptions
@@ -46,6 +47,7 @@ enum class CupcakeScreen {
  */
 @Composable
 fun CupcakeAppBar(
+    currentScreen: CupcakeScreen,
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
     modifier: Modifier = Modifier
@@ -71,16 +73,18 @@ fun CupcakeApp(modifier: Modifier = Modifier, viewModel: OrderViewModel = viewMo
     /* NavHost에서 쓰기 위한 NavController 인스턴스 가져옴
      * NavHost와 AppBar에서 네비게이션 컨트롤러를 쓸 거라서 이 컴포저블에서 선언해야 한다 */
     val navController = rememberNavController()
-
-    // TODO: Get current back stack entry
-
-    // TODO: Get the name of the current screen
+    // 첫 화면 말고 다른 화면들에서 좌상단에 백버튼을 표시하려면 앱의 백 스택을 참조해야 한다
+    val backStackEntry by navController.currentBackStackEntryAsState()
+    val currentScreen = CupcakeScreen.valueOf(
+        backStackEntry?.destination?.route ?: CupcakeScreen.Start.name
+    )
 
     Scaffold(
         topBar = {
             CupcakeAppBar(
-                canNavigateBack = false,
-                navigateUp = { /* TODO: implement back navigation */ }
+                currentScreen = currentScreen,
+                canNavigateBack = navController.previousBackStackEntry != null,
+                navigateUp = { navController.navigateUp() }
             )
         }
     ) { innerPadding ->
