@@ -96,7 +96,13 @@ fun CupcakeApp(modifier: Modifier = Modifier, viewModel: OrderViewModel = viewMo
              * - content : 특정 경로에 표시할 컴포저블 호출
              */
             composable(route = CupcakeScreen.Start.name) {
-                StartOrderScreen(quantityOptions = quantityOptions)
+                StartOrderScreen(
+                    quantityOptions = quantityOptions,
+                    onNextButtonClicked = {
+                        viewModel.setQuantity(it)
+                        navController.navigate(CupcakeScreen.Flavor.name)
+                    }
+                )
             }
 
             composable(route = CupcakeScreen.Flavor.name) {
@@ -104,21 +110,41 @@ fun CupcakeApp(modifier: Modifier = Modifier, viewModel: OrderViewModel = viewMo
                 SelectOptionScreen(
                     subtotal = uiState.price,
                     options = flavors.map { id -> context.resources.getString(id) },
-                    onSelectionChanged = { viewModel.setFlavor(it) }
+                    onSelectionChanged = { viewModel.setFlavor(it) },
+                    onNextButtonClicked = {
+                        navController.navigate(CupcakeScreen.Pickup.name)
+                    },
+                    onCancelButtonClicked = {
+                        //
+                    }
                 )
             }
 
-            // 수령일 화면은 맛 화면과 유사하다. 컴포저블에 전달되는 데이터가 다르다
+            // 수령일 화면. 맛 화면과 유사하지만 컴포저블에 전달되는 데이터가 다르다
             composable(route = CupcakeScreen.Pickup.name) {
                 SelectOptionScreen(
                     subtotal = uiState.price,
                     options = uiState.pickupOptions,
-                    onSelectionChanged = { viewModel.setDate(it) }
+                    onSelectionChanged = { viewModel.setDate(it) },
+                    onNextButtonClicked = {
+                        navController.navigate(CupcakeScreen.Summary.name)
+                    },
+                    onCancelButtonClicked = {
+                        //
+                    }
                 )
             }
 
             composable(route = CupcakeScreen.Summary.name) {
-                OrderSummaryScreen(orderUiState = uiState)
+                OrderSummaryScreen(
+                    orderUiState = uiState,
+                    onSendButtonClicked = { subject: String, summary: String ->
+                        //
+                    },
+                    onCancelButtonClicked = {
+                        //
+                    }
+                )
             }
         }
     }

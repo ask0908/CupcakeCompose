@@ -73,9 +73,3 @@ fun SelectQuantityButton(
         Text(stringResource(labelResourceId))
     }
 }
-
-@Preview
-@Composable
-fun StartOrderPreview(){
-    StartOrderScreen(quantityOptions = quantityOptions)
-}
