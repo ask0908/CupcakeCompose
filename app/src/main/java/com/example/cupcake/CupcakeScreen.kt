@@ -1,5 +1,7 @@
 package com.example.cupcake
 
+import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -65,7 +67,7 @@ fun CupcakeAppBar(
 }
 
 @Composable
-fun CupcakeApp(modifier: Modifier = Modifier, viewModel: OrderViewModel = viewModel()){
+fun CupcakeApp(modifier: Modifier = Modifier, viewModel: OrderViewModel = viewModel()) {
     /* NavHost에서 쓰기 위한 NavController 인스턴스 가져옴
      * NavHost와 AppBar에서 네비게이션 컨트롤러를 쓸 거라서 이 컴포저블에서 선언해야 한다 */
     val navController = rememberNavController()
@@ -137,10 +139,11 @@ fun CupcakeApp(modifier: Modifier = Modifier, viewModel: OrderViewModel = viewMo
             }
 
             composable(route = CupcakeScreen.Summary.name) {
+                val context = LocalContext.current
                 OrderSummaryScreen(
                     orderUiState = uiState,
                     onSendButtonClicked = { subject: String, summary: String ->
-                        //
+                        shareOrder(context, subject, summary)
                     },
                     onCancelButtonClicked = {
                         cancelOrderAndNavigateToStart(viewModel, navController)
@@ -149,6 +152,24 @@ fun CupcakeApp(modifier: Modifier = Modifier, viewModel: OrderViewModel = viewMo
             }
         }
     }
+}
+
+private fun shareOrder(
+    context: Context,
+    subject: String,
+    summary: String
+) {
+    val intent = Intent(Intent.ACTION_SEND).apply {
+        type = "text/plain"
+        putExtra(Intent.EXTRA_SUBJECT, subject)
+        putExtra(Intent.EXTRA_TEXT, summary)
+    }
+    context.startActivity(
+        Intent.createChooser(
+            intent,
+            context.getString(R.string.new_cupcake_order)
+        )
+    )
 }
 
 private fun cancelOrderAndNavigateToStart(

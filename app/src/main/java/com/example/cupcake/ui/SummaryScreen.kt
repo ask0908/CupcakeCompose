@@ -32,7 +32,7 @@ fun OrderSummaryScreen(
     onCancelButtonClicked: () -> Unit,
     onSendButtonClicked: (String, String) -> Unit,
     modifier: Modifier = Modifier
-){
+) {
     val resources = LocalContext.current.resources
 
     val numberOfCupcakes = resources.getQuantityString(
@@ -59,7 +59,7 @@ fun OrderSummaryScreen(
         Pair(stringResource(R.string.pickup_date), orderUiState.date)
     )
 
-    Column (
+    Column(
         modifier = modifier.padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
