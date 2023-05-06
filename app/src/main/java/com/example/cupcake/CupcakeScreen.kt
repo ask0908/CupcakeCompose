@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -115,7 +116,7 @@ fun CupcakeApp(modifier: Modifier = Modifier, viewModel: OrderViewModel = viewMo
                         navController.navigate(CupcakeScreen.Pickup.name)
                     },
                     onCancelButtonClicked = {
-                        //
+                        cancelOrderAndNavigateToStart(viewModel, navController)
                     }
                 )
             }
@@ -130,7 +131,7 @@ fun CupcakeApp(modifier: Modifier = Modifier, viewModel: OrderViewModel = viewMo
                         navController.navigate(CupcakeScreen.Summary.name)
                     },
                     onCancelButtonClicked = {
-                        //
+                        cancelOrderAndNavigateToStart(viewModel, navController)
                     }
                 )
             }
@@ -142,11 +143,26 @@ fun CupcakeApp(modifier: Modifier = Modifier, viewModel: OrderViewModel = viewMo
                         //
                     },
                     onCancelButtonClicked = {
-                        //
+                        cancelOrderAndNavigateToStart(viewModel, navController)
                     }
                 )
             }
         }
     }
+}
+
+private fun cancelOrderAndNavigateToStart(
+    viewModel: OrderViewModel,
+    navController: NavController
+) {
+    viewModel.resetOrder()
+    /**
+     * route : 다시 돌아갈 대상의 경로를 나타내는 문자열
+     * inclusive : true면 지정된 경로 삭제, false면 시작 대상 위의 모든 대상을 삭제해서 시작 대상을 유저에게 표시되는 최상단 화면으로 둔다
+     */
+    navController.popBackStack(
+        route = CupcakeScreen.Start.name,
+        inclusive = false
+    )
 }
 
