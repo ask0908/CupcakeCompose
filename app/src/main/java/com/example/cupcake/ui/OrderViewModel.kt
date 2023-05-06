@@ -1,18 +1,3 @@
-/*
- * Copyright (C) 2022 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.example.cupcake.ui
 
 import androidx.lifecycle.ViewModel
@@ -47,35 +32,33 @@ class OrderViewModel : ViewModel() {
     /**
      * Set the quantity [numberCupcakes] of cupcakes for this order's state and update the price
      */
-    fun setQuantity(numberCupcakes: Int) {
-        _uiState.update { currentState ->
-            currentState.copy(
-                quantity = numberCupcakes,
-                price = calculatePrice(quantity = numberCupcakes)
-            )
-        }
+    fun setQuantity(numberCupcakes: Int) = _uiState.update { currentState ->
+        currentState.copy(
+            quantity = numberCupcakes,
+            price = calculatePrice(quantity = numberCupcakes)
+        )
     }
 
     /**
      * Set the [desiredFlavor] of cupcakes for this order's state.
+     * 이 주문 상태에 대해 컵케이크의 [desiredFlavor]를 설정
+     *
      * Only 1 flavor can be selected for the whole order.
+     * 전체 주문에 대해 1가지 맛만 선택할 수 있다
      */
-    fun setFlavor(desiredFlavor: String) {
-        _uiState.update { currentState ->
-            currentState.copy(flavor = desiredFlavor)
-        }
+    fun setFlavor(desiredFlavor: String) = _uiState.update { currentState ->
+        currentState.copy(flavor = desiredFlavor)
     }
 
     /**
      * Set the [pickupDate] for this order's state and update the price
+     * 이 주문 상태의 [pickupDate] 설정 및 가격 업데이트
      */
-    fun setDate(pickupDate: String) {
-        _uiState.update { currentState ->
-            currentState.copy(
-                date = pickupDate,
-                price = calculatePrice(pickupDate = pickupDate)
-            )
-        }
+    fun setDate(pickupDate: String) = _uiState.update { currentState ->
+        currentState.copy(
+            date = pickupDate,
+            price = calculatePrice(pickupDate = pickupDate)
+        )
     }
 
     /**
@@ -97,12 +80,12 @@ class OrderViewModel : ViewModel() {
         if (pickupOptions()[0] == pickupDate) {
             calculatedPrice += PRICE_FOR_SAME_DAY_PICKUP
         }
-        val formattedPrice = NumberFormat.getCurrencyInstance().format(calculatedPrice)
-        return formattedPrice
+        return NumberFormat.getCurrencyInstance().format(calculatedPrice)
     }
 
     /**
      * Returns a list of date options starting with the current date and the following 3 dates.
+     * 현재 날짜와 다음 3개 날짜로 시작하는 날짜 옵션 목록을 반환
      */
     private fun pickupOptions(): List<String> {
         val dateOptions = mutableListOf<String>()

@@ -8,6 +8,7 @@ import com.example.cupcake.R
 
 /**
  * Composable that displays formatted [price] that will be formatted and displayed on screen
+ * 형식화되어 화면에 표시될 형식화된 [가격]을 표시하는 컴포저블
  */
 @Composable
 fun FormattedPriceLabel(subtotal: String, modifier: Modifier = Modifier) {
